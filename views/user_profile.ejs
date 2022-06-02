@@ -1,0 +1,100 @@
+<link rel="stylesheet" href="<%=assetPath('css/user_profile.css')  %>">
+
+<div id="profile-main-container">
+    <div class="user-profile-details">
+        <div id="profile-image-contianer"> 
+            <img src = "<%=profile_user.avatar%>" alt="<%=user.name%>">
+        </div>
+        <div id="profile-details">
+            <div id="edit-details-popup">
+                <% if(user.id==profile_user.id){ %> 
+                    <!-- if user matches show the form -->
+                    <form action="/users/update/<%= profile_user.id%>" method="post" enctype="multipart/form-data">
+                    <table>
+                        <tr>
+                          <td>Profile Picture</td>
+                          <td> <input type="file" name="avatar" placeholder="Profile Picture" /></td>
+                        </tr>
+                        <tr>
+                            <td>User Name</td>
+                            <td><input type="text" name="name" placeholder="Enter Your name" value="<%= profile_user.name%>" required></td>
+                        </tr>
+                         <tr>
+                            <td>Email</td>
+                            <td> <input type="email" name="email" placeholder="Enter Your email" value="<%= profile_user.email%>" required> </td>
+                         </tr>
+                         <tr>
+                            <td>Add Bio</td>
+                            <td><input type="text" name="bio" placeholder="Enter bio" value="<%= profile_user.bio%>"></td>
+                         </tr>
+                         <tr>
+                            <td>Submit Details</td>
+                          <td><input type ="submit" name="submit" value="Update"></td>
+                         </tr>
+                        
+                      </table>
+                    </form>
+                    <% } %>
+            </div>
+            <div id="name-and-edit">
+                <div id="user-name">
+                    <%= profile_user.name %>
+                </div>
+                <% if(user.id==profile_user.id){ %> 
+                <div id="edit-button">
+                   <button id="edit-btn">Edit Profile</button>
+                </div>
+                <%}else{%>
+                    <div id="edit-button">
+                        <% if(friendOrNot) { %>
+                            <form action="/friendship/addfriend" method="post">
+                                <input type="hidden" name="friendUserId" value="<%= profile_user.id %>">
+                                <input type="submit" value="Unfollow">
+                            </form>
+                        <% } else {%> 
+                        <form action="/friendship/addfriend" method="post">
+                            <input type="hidden" name="friendUserId" value="<%= profile_user.id %>">
+                            <input type="submit" value="Follow">
+                        </form>
+                        <% } %>
+                    </div>
+                    <% } %> 
+
+            </div>
+            <div id="bio">
+                <%= profile_user.bio %>
+            </div>
+        </div>
+        
+    </div>
+    <div class="user-profile-user-posts">
+        <% if (posts==null || posts.length==0){ %> 
+            <h3 style ="margin-left:25%;" ><b>This User Has Not Posted Anything Yet...!</b></h3>
+        <% } %> 
+        <%for(post of posts){%>
+            <%- include('_posts') -%>
+        <%}%>
+        
+    </div>
+</div>
+
+<script src = "<%=assetPath('js/home_posts_comments.js')%>"></script>
+<script src="<%=assetPath('js/home_posts.js')%>"></script>
+<!-- import the script file for toggle likes, also run it over for the already present posts and comments on the page -->
+<script src="<%=assetPath('js/toggle_likes.js')  %>"></script>
+<script>
+    $('.toggle-like-button').each(function(){
+        let self = this;
+        let toggleLike = new ToggleLike(self);
+    });
+</script>
+<script>
+    document.getElementById("edit-details-popup").style.display="none";
+    document.getElementById("edit-btn").addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById("edit-details-popup").style.display="block";
+
+    })
+</script>
+
+

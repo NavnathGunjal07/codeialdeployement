@@ -1,0 +1,90 @@
+
+<link rel="stylesheet" href="<%=assetPath('css/home.css')  %>">
+<link rel="stylesheet"  href="<%=assetPath('css/chat_box.css')  %>">
+
+<div id="home-container">
+    <div id="feed-posts">
+        <% if(locals.user){ %>
+            <div id = "add-new-posts-form-home">
+                <form  action="/posts/create" id="new-post-form" method="POST">
+                    <span class="topic">Enter Your Topic/Question Here..!</span>
+                    <input id = "question" type="text" name="topic" placeholder="Topic/Question" >
+                   <span class="topic">Enter Your Content/Description Or Ans Here..!</span> 
+                    <textarea name="content" cols="30" rows="3" placeholder="Add Content/Description..." required></textarea>
+                    <button type="submit" name=""> Post <i class="fas fa-paper-plane"></i></button> 
+                </form>
+            </div>
+        
+        <% } %>
+        <div id="posts-list-container">
+            <ul>
+                <% for(post of posts){%>
+                    <%- include('_posts') -%>
+                <%}%>
+            </ul>
+        </div>
+    </div>
+    
+    <div id="user-friends-section">
+        <div id="user-freinds-title">
+            <h4>Friends list</h4>
+        </div>
+        <div class="user-freinds">
+            
+       
+            <% for(u of addedfriends) {%>
+                <a href="/users/profile/<%= u.id %>">
+                <div class="all-users-section">
+                <!-- TODO need to ad in seperate page -->   
+                <div id="user-profile-pic">
+                    <img src="<%=u.avatar%>" alt="<%=u.name%>">
+                </div>  
+                <div id="user-profile-name-home"> <%= u.name %></div>
+                  
+            </div>
+        </a>
+            <% } %>
+        
+           
+        </div>
+        <div id="user-freinds-title">
+            <h4>All Users</h4>
+        </div>
+         <div class="user-freinds">
+            
+          
+           
+                <% for(u of all_users){%> 
+                    <a href="/users/profile/<%= u.id %>">
+                    <div class="all-users-section">
+                    <div id="user-profile-pic">
+                        <img src="<%=u.avatar%>" alt="<%=u.name%>">
+                    </div>  
+                    <div id="user-profile-name-home">  <%= u.name %></div>
+                </div></a>
+                <% } %> 
+           
+            
+         </div>
+   </div>
+   <%- include('_chat_box') -%>
+</div>
+<script src = "<%=assetPath('js/home_posts_comments.js')%>"></script>
+<script src="<%=assetPath('js/chat_engine.js')  %>"></script>
+<script src = "<%=assetPath('js/home_posts.js')  %>"></script>
+<!-- import the script file for toggle likes, also run it over for the already present posts and comments on the page -->
+<script src="<%=assetPath('js/toggle_likes.js')%>"></script>
+<script>
+    $('.toggle-like-button').each(function(){
+        let self = this;
+        let toggleLike = new ToggleLike(self);
+    });
+</script>
+
+<script type = "text/JavaScript" src = " https://MomentJS.com/downloads/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<% if (locals.user){ %>
+<script>
+    new ChatEngine('user-chat-box', '<%= locals.user.name %>')
+</script>
+<% } %>
