@@ -11,7 +11,7 @@
   },
   "engines": {
     "npm": "8.3.1",
-    "node": "14.18.0"
+    "node": "14.18.2"
   },
   "repository": {
     "type": "git",
@@ -52,6 +52,7 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.4",
     "nodemailer": "^6.7.2",
+    "nodemon":"^2.0.16",
     "passport": "^0.5.2",
     "passport-google-oauth": "^2.0.0",
     "passport-jwt": "^4.0.0",
